@@ -15,5 +15,9 @@ module Clide
 		def total_page
 			@total_page
 		end
+
+		def slide_list
+			@slide_list	
+		end
 	end
 end

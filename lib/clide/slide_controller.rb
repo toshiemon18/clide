@@ -7,11 +7,9 @@ require 'curses'
 module Clide
 	class Controller
 		def initialize(slide_list)
-			@slides = []
 			@slides = slide_list
 			@current_page = 0
-			@total_page = slide_list.total_page
-			self.termSize(40, 60)
+			@total_page = slide_list.length
 		end
 
 		# 必ず最初に呼ばれる
@@ -35,10 +33,10 @@ module Clide
 		end
 
 		def slide_setup
-			slide = @slides[@current_slide]
+			slide = @slides[@current_page]
 			line = 0
-			start_column = slide.start_columns
-			start_line = slide.slide_list
+			start_column = slide.start_column
+			start_line = slide.start_line
 			slide.content.each do |str|
 				Curses.setpos(start_line + line , start_column)
 				Curses.addstr(str)
@@ -46,13 +44,13 @@ module Clide
 			end
 			Curses.setpos(0, 0)
 			Curses.addstr(" - #{slide.title} - ")
-			Curses.setpos(Curses.lines, Curses.cols / 2 - current_page.to_s.length)
-			Curses.addstr(current_page)
+			Curses.setpos(Curses.lines, Curses.cols / 2 - @current_page.to_s.length)
+			Curses.addstr("#{@current_page}")
 		end
 
 		# 次のスライドを準備する
 		def next
-			if @current_page != slides.length then 
+			if @current_page != @slides.length then 
 				@current_page+=1
     				Curses.clear
 			end
@@ -73,6 +71,9 @@ module Clide
 				loop do 
 					self.slide_setup
 					self.stand
+					if @current_page == @total_page then
+						break
+					end
 				end
 			ensure
 				self.screen_close
