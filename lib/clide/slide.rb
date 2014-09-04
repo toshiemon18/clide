@@ -7,14 +7,11 @@ require 'curses'
 module Clide
 	class Slide
 
-		attr_accessor :title
-
-		def initialize(content="", title="")
+		def initialize(content="")
 			slide_text = content
 			text_line_num = slide_text.count("\n")
 			@lines = Array.new(text_line_num, "")
 			slide_text.each_line { |text| @lines << text.strip! }
-			@title = title
 		end
 
 		# スライド本文をセットする
@@ -30,14 +27,9 @@ module Clide
 			@lines
 		end
 
-		# スライドのタイトルを返す
-		def title
-			@title
-		end
-
 		# 本文のはじめの行のスタート位置
 		def start_line
-			Curses.lines / 2 - @lines.length / 2
+			Curses.lines / 2 - @lines.length
 		end
 
 		# 本文のスタート位置
@@ -47,7 +39,7 @@ module Clide
 			@lines.each do |str|
 				max_length = str.length if max_length < str.length
 			end
-			return Curses.cols / 2 - max_length / 2
+			return Curses.cols / 2 - max_length / 2 - 2
 		end
 	end
 end
