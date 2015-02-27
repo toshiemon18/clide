@@ -12,4 +12,4 @@ slide.add(content = <<-CONTENT
 CONTENT
 )
 
-Clide::Controller.new(list).show
+Clide::Controller.new(slide).show
